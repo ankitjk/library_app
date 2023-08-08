@@ -48,7 +48,12 @@
     <nav>
         <a href="{{ url_for('index') }}">Book Reviews</a>
         <a href="{{ url_for('create') }}">Create</a>
-        <a href="#">Rate</a>
+        <a href="#">About</a>
+
+        <form action="{{ url_for('index') }}" method="get">
+            <input type="text" name="search_query" placeholder="Search books...">
+            <button type="submit">Search</button>
+        </form>
     </nav>
     <hr>
     <div class="content">
