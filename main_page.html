@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Recommended Books</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Recommended Books</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Add New Book</a></li>
+            <li><a href="#">Saved Books</a></li>
+            <li><a href="#">Logout</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div class="search">
+            <input type="text" id="search-bar" placeholder="Search for books...">
+        </div>
+        <div class="filter">
+            <button id="btn-alpha">Alphabetical A-Z</button>
+            <button id="btn-low-to-high">Ratings Low to High</button>
+            <button id="btn-high-to-low">Ratings High to Low</button>
+        </div>
+        <div class="books">
+            <!-- Display books here -->
+            <!-- Example book card:
+            <div class="book-card">
+                <h2>Book Title</h2>
+                <p>Author: Author Name</p>
+                <p>Rating: 4.5</p>
+                <button class="btn-remove">Remove</button>
+                <button class="btn-add">Add to Saved</button>
+            </div>
+            -->
+        </div>
+    </main>
+    <footer>
+        <p>&copy; Recommended Books</p>
+    </footer>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
