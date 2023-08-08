@@ -22,3 +22,12 @@ if __name__=="__main__":
 
         def __repr__(self):
             return f'<Book {self.isbn}>'
+        
+    class Book(db.Model):
+        user_id = db.Column(db.Integer, primary_key=True)
+        isbn = db.Column(db.Integer, primary_key=True)
+        rating = db.Column(db.Integer, nullable=False)
+    
+    class Book(db.Model):
+        user_id = db.Column(db.Integer, primary_key=True)
+        age = db.Column(db.Integer, nullable=True)
