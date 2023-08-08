@@ -13,15 +13,12 @@ if __name__=="__main__":
 
     db = SQLAlchemy(app)
 
-    class Student(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        firstname = db.Column(db.String(100), nullable=False)
-        lastname = db.Column(db.String(100), nullable=False)
-        email = db.Column(db.String(80), unique=True, nullable=False)
-        age = db.Column(db.Integer)
-        created_at = db.Column(db.DateTime(timezone=True),
-                            server_default=func.now())
-        bio = db.Column(db.Text)
+    class Book(db.Model):
+        isbn = db.Column(db.Integer, primary_key=True)
+        title = db.Column(db.String(256), nullable=False)
+        author = db.Column(db.String(256), nullable=False)
+        year_published = db.Column(db.Integer, nullable=False)
+        publisher = db.Column(db.String(256))
 
         def __repr__(self):
-            return f'<Student {self.firstname}>'
+            return f'<Book {self.isbn}>'
