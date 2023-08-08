@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="title">{% block title %} Books {% endblock %}</h1>
+    <div class="content">
+        {% for book in books %}
+            <div class="book">
+                <p><b>#{{ book.isbn }}</b></p>
+                <b>
+                    <p class="title">{{ book.title }}</p>
+                </b>
+                <p>Author: {{ book.author }}</p>
+                <p>Year published: {{ book.year_published }}</p>
+                <p>Publisher: {{ book.publisher }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
