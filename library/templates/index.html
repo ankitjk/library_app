@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="title">{% block title %} Books {% endblock %}</h1>
-    <div class="content">
+    <h1 class="title">Books</h1>
     <table>
         <tr>
             <th>ISBN</th>
@@ -12,16 +11,13 @@
             <th>Publisher</th>
         </tr>
         {% for book in books %}
-            <div class="book">
-            <tr>
+            <tr class="book">
                 <td>{{ book.isbn }}</td>
                 <td>{{ book.title }}</td>
                 <td>{{ book.author }}</td>
                 <td>{{ book.year_published }}</td>
                 <td>{{ book.publisher }}</td>
             </tr>
-            </div>
         {% endfor %}
     </table>
-    </div>
 {% endblock %}

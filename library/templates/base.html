@@ -51,12 +51,22 @@
         <a href="#">About</a>
 
         <form action="{{ url_for('index') }}" method="get">
-            <input type="text" name="search_query" placeholder="Search books...">
+            <input type="text" name="search_query" placeholder="Search books by title...">
             <button type="submit">Search</button>
         </form>
     </nav>
     <hr>
     <div class="content">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         {% block content %} {% endblock %}
     </div>
 </body>

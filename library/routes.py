@@ -1,10 +1,15 @@
 from library import app
 from library.models import *
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, flash
 
 @app.route('/')
 def index():
-    books = Book.query.all()
+    search_query = request.args.get('search_query')
+    if search_query:
+        books = Book.query.filter(Book.title.ilike(f'%{search_query}%')).all()
+        flash("Search results for book title: '{}'".format(search_query), 'success')
+    else:
+        books = Book.query.all()
     return render_template('index.html', books=books)
 
 @app.route('/login')
