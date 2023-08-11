@@ -5,18 +5,38 @@
 
 {% block content %}
     <h1 class="title">Books</h1>
-    <form action="{{ url_for('home') }}" method="get">
-        <input type="text" name="search_query" placeholder="Search books by title...">
-        <button type="submit">Search</button>
+    <form class="form-inline" action="{{ url_for('home') }}" method="get">
+        <div class="input-group">
+            <input type="text" class="form-control mr-sm-2" name="search_query" placeholder="Search books by title...">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </div>
+        {% if books %}
+        <div class="btn-group ml-2">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sort
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ url_for('home', search_query=search_query, sort='title_az') }}">Title (A-Z)</a>
+                <a class="dropdown-item" href="{{ url_for('home', search_query=search_query, sort='title_za') }}">Title (Z-A)</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{ url_for('home', search_query=search_query, sort='year_oldest') }}">Year (Oldest to Newest)</a>
+                <a class="dropdown-item" href="{{ url_for('home', search_query=search_query, sort='year_newest') }}">Year (Newest to Oldest)</a>
+            </div>
+        </div>
+        {% endif %}
     </form>
-    <table>
-        <tr>
-            <th>ISBN</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Year Published</th>
-            <th>Publisher</th>
-        </tr>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year Published</th>
+                <th>Publisher</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
         {% for book in books %}
             <tr class="book">
                 <td>{{ book.isbn }}</td>
@@ -24,7 +44,11 @@
                 <td>{{ book.author }}</td>
                 <td>{{ book.year_published }}</td>
                 <td>{{ book.publisher }}</td>
+                <td>
+                    <button class="btn btn-outline btn-info">Borrow</button>
+                </td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
