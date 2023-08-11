@@ -55,14 +55,21 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    username = request.form['username']
-    password = request.form['password']
-    user = User.query.filter_by(username=username).first()
-    if not user or user.password != password:
-        flash("Username or password is incorrect.")
-        return redirect(url_for('login'))
-    login_user(user)
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if not user or user.password != password:
+            flash("Username or password is incorrect.")
+            return redirect(url_for('login'))
+        login_user(user)
+        return redirect(url_for('home'))
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 @app.route('/create', methods=('GET', 'POST'))
 def create():
