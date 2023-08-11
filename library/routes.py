@@ -1,8 +1,9 @@
 from library import app
 from library.models import *
 from flask import render_template, redirect, url_for, request, flash
-from library.forms import *
-from sqlalchemy import or_, desc, asc
+# from library.forms import *
+from sqlalchemy import desc, asc
+from flask_login import login_user, logout_user, login_required, current_user
 
 @app.route('/')
 @app.route('/home')
@@ -31,10 +32,37 @@ def home():
     
     return render_template('home.html', books=books, search_query=search_query)
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm()
-    return render_template('register.html', form=form)
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        verify = request.form['confirm']
+        if password != verify:
+            flash("Passwords do not match.")
+            return redirect(url_for('register'))
+        user = User(username=username, email=email, password=password)
+        db.session.add(user)
+        try:
+            db.session.commit()
+            login_user(user)
+            return redirect(url_for('home'))
+        except Exception as e:
+            flash(f'There was an error with creating account: {e}', category='danger')
+            db.session.rollback()
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    user = User.query.filter_by(username=username).first()
+    if not user or user.password != password:
+        flash("Username or password is incorrect.")
+        return redirect(url_for('login'))
+    login_user(user)
+    return render_template('login.html')
 
 @app.route('/create', methods=('GET', 'POST'))
 def create():
