@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+    Change Rating
+{% endblock %}
+
+{% block content %}
+    <h1 class="title">Change Rating for "{{ book.title }}"</h1>
+    {% if user_rating %}
+        <p>Your Previous Rating: {{ user_rating.rating }}</p>
+    {% endif %}
+    <form id="rating-form" action="{{ url_for('change_rating', isbn=book.isbn) }}" method="post">
+        <p>Your New Rating: 
+            <select name="rating" required>
+                <option value="" disabled>Select Rating</option>
+                <option value="1" {% if user_rating and user_rating.rating == 1 %}selected{% endif %}>1</option>
+                <option value="2" {% if user_rating and user_rating.rating == 2 %}selected{% endif %}>2</option>
+                <option value="3" {% if user_rating and user_rating.rating == 3 %}selected{% endif %}>3</option>
+                <option value="4" {% if user_rating and user_rating.rating == 4 %}selected{% endif %}>4</option>
+                <option value="5" {% if user_rating and user_rating.rating == 5 %}selected{% endif %}>5</option>
+            </select>
+        </p>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit New Rating</button>
+    </form>
+{% endblock %}

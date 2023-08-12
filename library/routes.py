@@ -1,9 +1,9 @@
 from library import app
 from library.models import *
 from flask import render_template, redirect, url_for, request, flash
-# from library.forms import *
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, exists
 from flask_login import login_user, logout_user, login_required, current_user
+from datetime import datetime
 
 @app.route('/')
 @app.route('/home')
@@ -27,7 +27,11 @@ def home():
         books_query = books_query.order_by(asc(Book.year_published))
     elif sort_option == 'year_newest':
         books_query = books_query.order_by(desc(Book.year_published))
-    
+
+    # Ensure that borrowed books do not show up
+    borrowed = exists().where(Book.isbn == Borrowed.isbn)
+    books_query = books_query.filter(~borrowed)
+
     books = books_query.all()
     
     return render_template('home.html', books=books, search_query=search_query)
@@ -71,16 +75,73 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route('/create', methods=('GET', 'POST'))
-def create():
+@app.route('/rate/<int:isbn>', methods=['GET', 'POST'])
+@login_required
+def rate_book(isbn):
+    book = Book.query.get_or_404(isbn)
+    user_rating = Rating.query.filter_by(username=current_user.username, isbn=isbn).first()
+
     if request.method == 'POST':
-        isbn = request.form['isbn']
-        title = request.form['title']
-        author = request.form['author']
-        year_published = request.form['year_published']
-        publisher = request.form['publisher']
-        book = Book(isbn=isbn, title=title, author=author, year_published=year_published, publisher=publisher)
-        db.session.add(book)
+        rating_value = int(request.form['rating'])
+
+        if user_rating:
+            user_rating.rating = rating_value
+        else:
+            new_rating = Rating(username=current_user.username, isbn=isbn, rating=rating_value)
+            db.session.add(new_rating)
+
         db.session.commit()
-        return redirect(url_for('home'))
-    return render_template('create.html')
+
+        # Retain search query and sort option
+        search_query = request.args.get('search_query')
+        return redirect(url_for('home', search_query=request.args.get('search_query')))
+    
+    return render_template('rating.html', book=book, user_rating=user_rating)
+
+@app.route('/rate/<int:isbn>/change', methods=['GET', 'POST'])
+@login_required
+def change_rating(isbn):
+    book = Book.query.get_or_404(isbn)
+    user_rating = Rating.query.filter_by(username=current_user.username, isbn=isbn).first()
+
+    if request.method == 'POST':
+        rating_value = int(request.form['rating'])
+
+        if user_rating:
+            user_rating.rating = rating_value
+        else:
+            new_rating = Rating(username=current_user.username, isbn=isbn, rating=rating_value)
+            db.session.add(new_rating)
+
+        db.session.commit()
+
+        # Retain search query and sort option
+        search_query = request.args.get('search_query')
+        return redirect(url_for('home', search_query=request.args.get('search_query')))
+    
+    return render_template('change_rating.html', book=book, user_rating=user_rating)
+
+@app.route('/borrow_book/<int:isbn>')
+@login_required
+def borrow_book(isbn):
+    print("DEBUG:", isbn)
+    new_borrow = Borrowed(username=current_user.username, isbn=isbn, date=datetime.now())
+    db.session.add(new_borrow)
+    db.session.commit()
+    return redirect(url_for('home'))
+
+@app.route('/borrowed', methods=['GET', 'POST'])
+@login_required
+def borrowed():
+    borrowed_query = Book.query.join(Borrowed).filter_by(username = current_user.username)
+    borrowed = borrowed_query.all()
+    return render_template('borrowed.html', borrowed=borrowed)
+
+@app.route('/return_book/<int:isbn>')
+@login_required
+def return_book(isbn):
+    print("DEBUG:", isbn)
+    new_borrow = Borrowed(username=current_user.username, isbn=isbn, date=datetime.now())
+    db.session.add(new_borrow)
+    db.session.commit()
+    return redirect(url_for('home'))

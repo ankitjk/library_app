@@ -11,7 +11,8 @@ class Book(db.Model):
     author = db.Column(db.String(256), nullable=False)
     year_published = db.Column(db.Integer, nullable=False)
     publisher = db.Column(db.String(256))
-    borrowed = db.Column(db.Boolean, nullable=False)
+    ratings = db.relationship('Rating', backref='book', lazy='dynamic')
+    borrowed = db.relationship('Borrowed', backref='book', lazy='dynamic')
     
 class Rating(db.Model):
     username = db.Column(db.String(50), db.ForeignKey('user.username'), primary_key=True)
@@ -23,6 +24,13 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(20), nullable=False)
     # name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(256), nullable=False)
+    ratings = db.relationship('Rating', backref='user', lazy='dynamic')
+    borrowed = db.relationship('Borrowed', backref='user', lazy='dynamic')
 
     def get_id(self):
         return self.username
+    
+class Borrowed(db.Model):
+    username = db.Column(db.String(50), db.ForeignKey('user.username'), primary_key=True)
+    isbn = db.Column(db.Integer, db.ForeignKey('book.isbn'), primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)

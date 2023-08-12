@@ -16,10 +16,10 @@ if __name__ == '__main__':
         #         if i > 100:
         #             break
         #         try:
-        #             book = Book(isbn=int(row[0]), title=row[1], author=row[2], year_published=int(row[3]), publisher=row[4], borrowed=False)
+        #             book = Book(isbn=int(row[0]), title=row[1], author=row[2], year_published=int(row[3]), publisher=row[4])
         #             db.session.add(book)
         #         except:
         #             continue
         #         i += 1
-        # db.session.commit()
+        db.session.commit()
     app.run()

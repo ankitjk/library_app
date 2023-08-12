@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}
+    Your Books
+{% endblock %}
+
+{% block content %}
+    <h1 class="title" style="margin-left: 10px; margin-top: 10px;">Your Books</h1>
+    <table class="table table-striped" style="margin-top: 10px">
+        <thead class="thead-dark">
+            <tr>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year Published</th>
+                <th>Publisher</th>
+                {% if current_user.is_authenticated %}
+                <th></th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in borrowed %}
+            <tr class="book">
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.year_published }}</td>
+                <td>{{ book.publisher }}</td>
+                {% if current_user.is_authenticated %}
+                <td>
+                    <button class="btn btn-outline btn-info">Return</button>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

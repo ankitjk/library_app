@@ -24,7 +24,7 @@
             <ul class="navbar-nav mr-auto">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Your books<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ url_for('borrowed') }}">Your books<span class="sr-only">(current)</span></a>
                 </li>
                 {% endif %}
             </ul>
@@ -61,6 +61,26 @@
     
     {% endblock %}
 
+    <!-- JavaScript to Handle Rating Button Click -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const rateButtons = document.querySelectorAll(".rate-btn");
+            rateButtons.forEach(function(button) {
+                button.addEventListener("click", function() {
+                    const isbn = this.getAttribute("data-isbn");
+                    const searchQuery = new URLSearchParams(window.location.search).get('search_query');
+                    
+                    if (this.textContent.includes("Change Rating") || this.classList.contains("btn-warning")) {
+                        window.location.href = `/rate/${isbn}/change?search_query=${searchQuery}`;
+                    } else {
+                        window.location.href = `/rate/${isbn}?search_query=${searchQuery}`;
+                    }
+                });
+            });
+        });
+    </script>
+    
+    
     <!-- jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
