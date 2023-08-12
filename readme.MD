@@ -1,0 +1,3 @@
+Group Members: Ankit Kulshrestha, Vue Thao
+
+To run the library management system, some python packages such as flask and sqlalchemy may need to be installed. Also, if you want to create the tables from scratch, comment out the lines of code in run.py where specified to recreate the tables and load all the data. Running 'python3 run.py' in your shell should start the server and the webpage will be accessible through http://127.0.0.1:5000/.
