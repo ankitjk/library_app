@@ -28,7 +28,7 @@
                 <td>{{ book.publisher }}</td>
                 {% if current_user.is_authenticated %}
                 <td>
-                    <button class="btn btn-outline btn-info">Return</button>
+                    <a class="btn btn-outline btn-info" href="{{ url_for('return_book', isbn=book.isbn) }}">Return</button>
                 </td>
                 {% endif %}
             </tr>

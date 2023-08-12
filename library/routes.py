@@ -124,7 +124,6 @@ def change_rating(isbn):
 @app.route('/borrow_book/<int:isbn>')
 @login_required
 def borrow_book(isbn):
-    print("DEBUG:", isbn)
     new_borrow = Borrowed(username=current_user.username, isbn=isbn, date=datetime.now())
     db.session.add(new_borrow)
     db.session.commit()
@@ -140,8 +139,6 @@ def borrowed():
 @app.route('/return_book/<int:isbn>')
 @login_required
 def return_book(isbn):
-    print("DEBUG:", isbn)
-    new_borrow = Borrowed(username=current_user.username, isbn=isbn, date=datetime.now())
-    db.session.add(new_borrow)
+    Borrowed.query.filter(Borrowed.isbn == isbn).delete()
     db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(url_for('borrowed'))
