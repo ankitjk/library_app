@@ -32,7 +32,7 @@ def home():
     borrowed = exists().where(Book.isbn == Borrowed.isbn)
     books_query = books_query.filter(~borrowed)
 
-    books = books_query.all()
+    books = books_query.limit(500).all()
     
     return render_template('home.html', books=books, search_query=search_query)
 
