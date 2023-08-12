@@ -70,11 +70,8 @@
                     const isbn = this.getAttribute("data-isbn");
                     const searchQuery = new URLSearchParams(window.location.search).get('search_query');
                     
-                    if (this.textContent.includes("Change Rating") || this.classList.contains("btn-warning")) {
-                        window.location.href = `/rate/${isbn}/change?search_query=${searchQuery}`;
-                    } else {
-                        window.location.href = `/rate/${isbn}?search_query=${searchQuery}`;
-                    }
+                    // Redirect to the change rating page
+                    window.location.href = `/rate/${isbn}/change?search_query=${searchQuery}`;
                 });
             });
         });
